@@ -5,9 +5,12 @@ import com.stdevsec.flashcardBackend.repository.CardRepository;
 import com.stdevsec.flashcardBackend.repository.LenguajeRepository;
 import com.stdevsec.flashcardBackend.web.model.CardModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +42,20 @@ public class CardService {
                         card.getTraduccion(),
                         card.getLenguaje().getId()
                 )).collect(Collectors.toList());
+    }
+    public CardModel getRandomCard() {
+        List<Card> cards = repository.findAll();
+        if (!cards.isEmpty()) {
+            Card randomCard = cards.get(new Random().nextInt(cards.size()));
+            return new CardModel(
+                    randomCard.getId(),
+                    randomCard.getPalabra(),
+                    randomCard.getPronunciacion(),
+                    randomCard.getTraduccion(),
+                    randomCard.getLenguaje().getId()
+            );
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No cards available");
     }
 
     public CardModel createCard(CardModel model){

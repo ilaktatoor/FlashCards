@@ -1,5 +1,6 @@
 package com.stdevsec.flashcardBackend.web.controler;
 
+import com.stdevsec.flashcardBackend.entity.Card;
 import com.stdevsec.flashcardBackend.service.CardService;
 import com.stdevsec.flashcardBackend.web.model.CardModel;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -24,6 +25,11 @@ public class CardController {
     @GetMapping("/lenguaje/{lenguajeId}")
     public List<CardModel> getCardsByLenguaje(@PathVariable Long lenguajeId){
         return service.getCardsByLenguaje(lenguajeId);
+    }
+
+    @GetMapping("/random")
+    public CardModel getRandomCard() {
+        return service.getRandomCard();
     }
 
     @PostMapping
