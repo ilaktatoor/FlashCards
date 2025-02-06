@@ -1,42 +1,29 @@
-package com.stdevsec.flashcardBackend.entity;
+package com.stdevsec.lenguajewidget;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
-@Entity
-@Data
-public class Card {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
+public class CardDTO {
+    private int id;
     private String palabra;
-
     private String pronunciacion;
-
-    @Column(nullable = false)
     private String traduccion;
+    private int lenguajeId;
 
-    @ManyToOne
-    @JoinColumn(name = "lenguaje_id", nullable = false)
-    private Lenguaje lenguaje;
-
-    public Card() {}
-
-    public Card(String palabra, String pronunciacion, String traduccion, Lenguaje lenguaje) {
-
+    // Constructor
+    public CardDTO(int id, String palabra, String pronunciacion, String traduccion, int lenguajeId) {
+        this.id = id;
         this.palabra = palabra;
         this.pronunciacion = pronunciacion;
         this.traduccion = traduccion;
-        this.lenguaje = lenguaje;
+        this.lenguajeId = lenguajeId;
     }
 
-    public Long getId() {
+    // Getters y setters
+    public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getPalabra() {
         return palabra;
@@ -62,11 +49,11 @@ public class Card {
         this.traduccion = traduccion;
     }
 
-    public Lenguaje getLenguaje() {
-        return lenguaje;
+    public int getLenguajeId() {
+        return lenguajeId;
     }
 
-    public void setLenguaje(Lenguaje lenguaje) {
-        this.lenguaje = lenguaje;
+    public void setLenguajeId(int lenguajeId) {
+        this.lenguajeId = lenguajeId;
     }
 }

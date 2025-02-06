@@ -1,6 +1,7 @@
 package com.stdevsec.flashcardBackend.service;
 
 import com.stdevsec.flashcardBackend.entity.Card;
+import com.stdevsec.flashcardBackend.entity.Lenguaje;
 import com.stdevsec.flashcardBackend.repository.CardRepository;
 import com.stdevsec.flashcardBackend.repository.LenguajeRepository;
 import com.stdevsec.flashcardBackend.web.model.CardModel;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -58,24 +60,31 @@ public class CardService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No cards available");
     }
 
-    public CardModel createCard(CardModel model){
-        return lenguajeRepository.findById(model.getLenguajeId()).map(lenguaje -> {
-            Card card = new Card();
-            card.setPalabra(model.getPalabra());
-            card.setPronunciacion(model.getPronunciacion());
-            card.setTraduccion(model.getTraduccion());
-            card.setLenguaje(lenguaje);
+    public CardModel createCard(CardModel model) {
+        // Fetch the Lenguaje entity by ID
+        Optional<Lenguaje> lenguajeOpt = lenguajeRepository.findById(model.getLenguajeId());
+        if (!lenguajeOpt.isPresent()) {
+            throw new IllegalArgumentException("Lenguaje with ID " + model.getLenguajeId() + " not found");
+        }
 
-            Card savedCard = repository.save(card);
+        // Create and set the Card entity
+        Card card = new Card();
+        card.setPalabra(model.getPalabra());
+        card.setPronunciacion(model.getPronunciacion());
+        card.setTraduccion(model.getTraduccion());
+        card.setLenguaje(lenguajeOpt.get());
 
-            return new CardModel(
-                    savedCard.getId(),
-                    savedCard.getPalabra(),
-                    savedCard.getPronunciacion(),
-                    savedCard.getTraduccion(),
-                    savedCard.getLenguaje().getId()
-            );
-        }).orElse(null);
+        // Save the card to the database
+        Card savedCard = repository.save(card);
+
+        // Convert the saved Card entity to a CardModel and return it
+        return new CardModel(
+                savedCard.getId(),
+                savedCard.getPalabra(),
+                savedCard.getPronunciacion(),
+                savedCard.getTraduccion(),
+                savedCard.getLenguaje().getId()
+        );
     }
 
     public CardModel editCard(Long id, CardModel model){

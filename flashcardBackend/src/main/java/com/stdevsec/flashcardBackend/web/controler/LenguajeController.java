@@ -25,7 +25,7 @@ public class LenguajeController {
         return service.createLenguaje(model);
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLenguaje(@PathVariable Long id){
         if (service.deleteLenguaje(id)){
             return ResponseEntity.noContent().build();

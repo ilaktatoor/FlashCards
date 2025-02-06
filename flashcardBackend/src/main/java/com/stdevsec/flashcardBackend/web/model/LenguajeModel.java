@@ -13,4 +13,20 @@ public class LenguajeModel {
         this.id = id;
         this.lenguajeName = lenguajeName;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLenguajeName() {
+        return lenguajeName;
+    }
+
+    public void setLenguajeName(String lenguajeName) {
+        this.lenguajeName = lenguajeName;
+    }
 }

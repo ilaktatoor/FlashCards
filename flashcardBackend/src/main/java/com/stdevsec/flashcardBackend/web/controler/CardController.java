@@ -5,6 +5,7 @@ import com.stdevsec.flashcardBackend.service.CardService;
 import com.stdevsec.flashcardBackend.web.model.CardModel;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,12 +34,13 @@ public class CardController {
     }
 
     @PostMapping
-    public ResponseEntity<CardModel> createCard(@RequestBody CardModel model){
+    public ResponseEntity<CardModel> createCard(@RequestBody CardModel model) {
         CardModel createdCard = service.createCard(model);
-        if(createdCard != null){
-            return ResponseEntity.ok(createdCard);
-        }else{
-            return ResponseEntity.badRequest().build();
+        if (createdCard != null) {
+            return ResponseEntity.ok(createdCard); // Card created successfully
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST) // Return 400 if Lenguaje is not found
+                    .body(null);
         }
     }
 
